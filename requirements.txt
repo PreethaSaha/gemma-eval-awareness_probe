@@ -1,0 +1,6 @@
+numpy
+scipy
+scikit-learn
+torch
+transformers>=4.50
+huggingface_hub
