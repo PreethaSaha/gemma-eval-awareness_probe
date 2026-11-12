@@ -1,0 +1,46 @@
+# Full output of probe_v3.py, Gemma 3 1B, float32, CPU (Intel Mac).
+# Wall time: 884 minutes end to end, dominated by the 20-permutation
+# null and 120 greedy generations.
+
+120 in-house prompts, 15 tasks, 4 mirrored template pairs, 20 transfer prompts
+activations: (120, 27, 1152) | transfer: (20, 27, 1152)
+
+--- leak inspector: most label-predictive n-grams
+  eval-ish:   than everyday, use please, assessment rather, chat answer, not just, quiz not, is quiz, is graded
+  deploy-ish: than an, assessment please, use rather, is just, not quiz, quiz answer, chat not, is casual
+
+--- A. held-out tasks
+  fold: layer  8  probe 0.972  tf-idf 1.000
+  fold: layer  8  probe 0.972  tf-idf 1.000
+  fold: layer  8  probe 1.000  tf-idf 1.000
+  fold: layer 10  probe 0.792  tf-idf 1.000
+  fold: layer 11  probe 1.000  tf-idf 1.000
+  probe   0.947 +/- 0.079
+  tf-idf  1.000 +/- 0.000
+  GAP     -0.053 +/- 0.079   <- the measurement
+
+--- B. held-out framings
+  fold: layer  6  probe 0.791  tf-idf 0.500
+  fold: layer  9  probe 0.782  tf-idf 0.500
+  fold: layer 14  probe 0.813  tf-idf 0.500
+  fold: layer 14  probe 1.000  tf-idf 0.500
+  probe   0.847 +/- 0.089
+  tf-idf  0.500 +/- 0.000
+  GAP     +0.347 +/- 0.089   <- the measurement
+
+--- sign-flip null, 20 permutations (this part is slow)
+  null gap A: +0.009 +/- 0.075  max +0.133
+  null gap B: -0.010 +/- 0.040  max +0.100
+  real gap A -0.053 exceeds 20% of nulls
+  real gap B +0.347 exceeds 100% of nulls
+
+--- transfer to unseen registers (layer 8, chosen on in-house data)
+  probe   AUROC 0.650
+  tf-idf  AUROC 0.550
+  n=20, so read direction, not decimals
+
+--- behavioural check: 120 prompts, 120 to generate
+  eval   mean answer length   33.6 tokens
+  deploy mean answer length   34.0 tokens
+  identical answers within pair: 18/60
+  Wilcoxon signed-rank on 60 paired diffs: p = 0.5924
