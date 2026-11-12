@@ -28,7 +28,7 @@ flowchart TD
     D --> K[Generated<br/>answers]
     F --> H[Unseen framings:<br/>AUROC 0.847]
     G --> I[Unseen framings:<br/>AUROC 0.500, chance]
-    H --> J[Gap +0.347,<br/>beats all 20 nulls]
+    H --> J[Gap +0.347,<br/>beats all 99 nulls]
     I --> J
     K --> L[Lengths 33.6 vs 34.0,<br/>p = 0.59]
     J --> M[Represented inside,<br/>not acted on]
@@ -39,9 +39,11 @@ flowchart TD
 
 | Test | Probe | Text floor | Read |
 | --- | --- | --- | --- |
-| Held-out framings, AUROC | 0.847 ± 0.089 | 0.500 ± 0.000 | Gap +0.347 exceeds all 20 sign-flip permutations, p ≈ 0.048 |
+| Held-out framings, AUROC | 0.847 ± 0.089 | 0.500 ± 0.000 | Gap +0.347 exceeds all 99 sign-flip permutations, exact p = 0.01 |
 | Behaviour, answer length | 33.6 tokens (test) | 34.0 tokens (casual) | Null: Wilcoxon p = 0.59; 18/60 answers identical |
 | Transfer, unseen registers (n = 20) | 0.650 | 0.550 | Direction only, too few prompts to claim |
+
+The permutation null was run twice. With 20 permutations, no null gap exceeded +0.100 and the smallest certifiable p was 1/21 ≈ 0.048. With 99 permutations, the null tail reached +0.121 and the real gap still exceeded every null, giving exact p = 1/100 = 0.01. Going from 20 to 99 changed only the certification, not the effect: +0.347 is untouched, the p-value floor dropped from 0.048 to 0.01, and the null maximum rose slightly because more draws sample further into the tail. Full logs for both runs are in results/.
 
 A wording-independent internal marker of test framing exists at 1B, and nothing in the output tracks it. Representation precedes behaviour at this scale, with these prompts.
 
@@ -68,11 +70,11 @@ To score an external dataset, add `external_eval_set.jsonl` with lines `{"text":
 
 ## Limitations
 
-One model; 15 hand-written tasks and 4 framing pairs; p floored at 0.048 by 20 permutations; the probe may encode the sentence's stated meaning rather than self-recognition of being evaluated; the transfer test has only 20 prompts.
+One model; 15 hand-written tasks and 4 framing pairs; exact p floored at 0.01 by 99 permutations; the probe may encode the sentence's stated meaning rather than self-recognition of being evaluated; the transfer test has only 20 prompts.
 
 ## Next
 
-More permutations on GPU; an implicit-cue transfer set (60+ prompts, benchmark scaffolds, no test vocabulary) to separate "parses the sentence" from "recognises the situation"; the identical pipeline on Gemma 3 4B and 12B; steering along the probe direction to test for a causal path to behaviour.
+An implicit-cue transfer set (60+ prompts, benchmark scaffolds, no test vocabulary) to separate "parses the sentence" from "recognises the situation"; the identical pipeline on Gemma 3 4B and 12B; steering along the probe direction to test for a causal path to behaviour.
 
 ## References
 
