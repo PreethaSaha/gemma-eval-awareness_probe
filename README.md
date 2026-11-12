@@ -35,7 +35,7 @@ flowchart TD
     L --> M
 ```
 
-## Results (Gemma 3 1B, full log in `results/`)
+## Results (Gemma 3 1B)
 
 | Test | Probe | Text floor | Read |
 | --- | --- | --- | --- |
@@ -43,7 +43,7 @@ flowchart TD
 | Behaviour, answer length | 33.6 tokens (test) | 34.0 tokens (casual) | Null: Wilcoxon p = 0.59; 18/60 answers identical |
 | Transfer, unseen registers (n = 20) | 0.650 | 0.550 | Direction only, too few prompts to claim |
 
-The permutation null was run twice. With 20 permutations, no null gap exceeded +0.100 and the smallest certifiable p was 1/21 ≈ 0.048. With 99 permutations, the null tail reached +0.121 and the real gap still exceeded every null, giving exact p = 1/100 = 0.01. Going from 20 to 99 changed only the certification, not the effect: +0.347 is untouched, the p-value floor dropped from 0.048 to 0.01, and the null maximum rose slightly because more draws sample further into the tail. Full logs for both runs are in results/.
+The permutation null was run twice. With 20 permutations, no null gap exceeded +0.100 and the smallest certifiable p was 1/21 ≈ 0.048. With 99 permutations, the null tail reached +0.121 and the real gap still exceeded every null, giving exact p = 1/100 = 0.01. Going from 20 to 99 changed only the certification, not the effect: +0.347 is untouched, the p-value floor dropped from 0.048 to 0.01, and the null maximum rose slightly because more draws sample further into the tail. 
 
 A wording-independent internal marker of test framing exists at 1B, and nothing in the output tracks it. Representation precedes behaviour at this scale, with these prompts.
 
